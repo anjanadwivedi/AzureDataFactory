@@ -1,0 +1,9 @@
+{
+	"name": "ADFrest124",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "d454c2c6-bb2d-4b3a-bf9d-419b2103a1d5",
+		"tenantId": "76a2ae5a-9f00-4f6b-95ed-5d33d77c4d61"
+	}
+}

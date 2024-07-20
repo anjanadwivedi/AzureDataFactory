@@ -1,0 +1,80 @@
+{
+	"name": "append variable",
+	"properties": {
+		"activities": [
+			{
+				"name": "Append variable1",
+				"type": "AppendVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "marks",
+					"value": {
+						"value": "@int(pipeline().parameters.enterValue)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Append variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "output1",
+					"value": {
+						"value": "@variables('marks')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"marks": {
+				"type": "array",
+				"defaultValue": [
+					20,
+					30,
+					44,
+					78
+				]
+			},
+			"output": {
+				"type": "array"
+			},
+			"enterValue": {
+				"type": "String"
+			}
+		},
+		"variables": {
+			"marks": {
+				"type": "Array"
+			},
+			"output": {
+				"type": "Integer"
+			},
+			"output1": {
+				"type": "Array"
+			}
+		},
+		"folder": {
+			"name": "Control Flow activities"
+		},
+		"annotations": [
+			"DP-203"
+		],
+		"lastPublishTime": "2024-07-16T17:48:29Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,101 @@
+{
+	"name": "set varible",
+	"properties": {
+		"activities": [
+			{
+				"name": "Length varible",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "length",
+					"value": {
+						"value": "@pipeline().parameters.EnterLength",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "breath variable",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "breath1",
+					"value": {
+						"value": "@pipeline().parameters.EnterBreath",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "area",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Length varible",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "breath variable",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "area",
+					"value": {
+						"value": "@mul(variables('length'), variables('breath'))",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"EnterLength": {
+				"type": "int",
+				"defaultValue": 10
+			},
+			"EnterBreath": {
+				"type": "int",
+				"defaultValue": 10
+			}
+		},
+		"variables": {
+			"breath": {
+				"type": "Integer"
+			},
+			"breath1": {
+				"type": "Integer"
+			},
+			"length": {
+				"type": "Integer"
+			},
+			"area": {
+				"type": "Integer"
+			}
+		},
+		"folder": {
+			"name": "Control Flow activities"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-07-16T17:25:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
