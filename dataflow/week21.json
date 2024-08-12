@@ -1,0 +1,101 @@
+{
+	"name": "week21",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "orders_ds",
+						"type": "DatasetReference"
+					},
+					"name": "orders"
+				},
+				{
+					"dataset": {
+						"referenceName": "customer_sql_ds",
+						"type": "DatasetReference"
+					},
+					"name": "customer"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "final_output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "customerorders"
+				},
+				{
+					"name": "wherecaguas",
+					"description": "filter on city column"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "sort1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          order_id as integer,",
+				"          order_date as string,",
+				"          order_customer_id as short,",
+				"          order_status as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: true,",
+				"     inferDriftedColumnTypes: true,",
+				"     ignoreNoFilesFound: false) ~> orders",
+				"source(output(",
+				"          customer_id as integer,",
+				"          customer_fname as string,",
+				"          customer_lname as string,",
+				"          customer_email as string,",
+				"          customer_password as string,",
+				"          customer_street as string,",
+				"          customer_city as string,",
+				"          customer_state as string,",
+				"          customer_zipcode as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> customer",
+				"orders, customer join(order_customer_id == customer_id,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> customerorders",
+				"customerorders filter(lower(customer_city) == 'caguas') ~> wherecaguas",
+				"wherecaguas select(mapColumn(",
+				"          order_id,",
+				"          order_date,",
+				"          order_status,",
+				"          customer_id,",
+				"          customer_fname,",
+				"          customer_lname,",
+				"          customer_street,",
+				"          customer_city,",
+				"          customer_state,",
+				"          customer_zipcode",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sort(asc(customer_fname, true),",
+				"     caseInsensitive: true) ~> sort1",
+				"sort1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

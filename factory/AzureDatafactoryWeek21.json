@@ -1,0 +1,9 @@
+{
+	"name": "AzureDatafactoryWeek21",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "12eb4bac-bd26-4331-9e3b-3e0493cbc5aa",
+		"tenantId": "76a2ae5a-9f00-4f6b-95ed-5d33d77c4d61"
+	}
+}
